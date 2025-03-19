@@ -1,6 +1,70 @@
 import random
 import math
 
+class DataGenerator:
+    def __init__(self):
+        """
+        Initialize the data generator with your preferred range
+        """
+        self._min = 80  # Minimum frequency (Hz)
+        self._max = 120  # Maximum frequency (Hz)
+        self._frequency = 1.0  # Base frequency for peaks
+        self._phase = 0.0  # Current phase of the wave
+        
+    def _generate_normalized_value(self) -> float:
+        """
+        Private method that generates random values in the range 0-1
+        Combines:
+        - Sine wave for peaks and valleys (generator_1)
+        - Frequency control (generator_3)
+        - Added squiggles (generator_2)
+        """
+        # Update phase for continuous wave
+        self._phase += 0.1
+        
+        # Base sine wave with controlled frequency
+        base_wave = math.sin(self._frequency * self._phase)
+        
+        # Add higher frequency component for squiggles
+        squiggles = 0.2 * math.sin(5 * self._frequency * self._phase)
+        
+        # Add some random noise
+        noise = random.uniform(-0.1, 0.1)
+        
+        # Combine all components
+        value = base_wave + squiggles + noise
+        
+        # Normalize to 0-1 range
+        normalized = (value + 1) / 2
+        
+        # Ensure we stay within [0, 1] range
+        return max(0, min(1, normalized))
+    
+    @property
+    def random_value(self) -> float:
+        """
+        Public property that returns a value in your preferred range
+        Uses the formula y = mx + c where:
+        y is the intended output
+        m is the range (max - min)
+        x is the normalized value from _generate_normalized_value
+        c is the minimum value
+        """
+        x = self._generate_normalized_value()
+        m = self._max - self._min  # Range of values
+        c = self._min  # Minimum value
+        return m * x + c
+
+if __name__ == "__main__":
+    # Create an instance of our generator
+    generator = DataGenerator()
+    
+    # Test by generating a few values
+    print("Sample generated values:")
+    for _ in range(5):
+        value = generator.random_value
+        print(f"{value:.2f} Hz")
+
 def generator_1() -> float:
     """
     This generator creates a pattern using sine waves
