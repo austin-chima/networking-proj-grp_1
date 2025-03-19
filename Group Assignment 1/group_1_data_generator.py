@@ -2,13 +2,17 @@ import math
 import random
 import matplotlib.pyplot as plt
 
+import random
+import math
+
 class DataGenerator:
-    def __init__(self):
+    def __init__(self, min_value=80, max_value=120):
         """
-        Initialize the data generator
+        Initialize the data generator with a range of frequencies
         """
-        self._frequency = 100  # Base frequency for our generator
-        
+        self.min_value = min_value  # Minimum frequency value
+        self.max_value = max_value  # Maximum frequency value
+
     def _generate_normalized_value(self):
         """
         Private method that generates random values in the range 0-1
@@ -29,44 +33,14 @@ class DataGenerator:
         
         # Ensure we stay within bounds
         return max(0, min(1, value))
-    
-    @property
-    def random_value(self):
-        """
-        Public property that returns a frequency value
-        Uses y = mx + c where:
-        - x is the normalized value (0-1)
-        - m is the range (40)
-        - c is the minimum value (80)
-        This gives us frequencies between 80-120 Hz
-        """
-        x = self._generate_normalized_value()
-        m = 40  # range: 120 - 80 = 40
-        c = 80  # minimum value
-        return m * x + c
 
-if __name__ == "__main__":
-    # Create our generator
-    generator = DataGenerator()
-    
-    # Generate frequency-amplitude pairs
-    frequencies = []
-    amplitudes = []
-    
-    # Generate 500 data points as shown in the example
-    for _ in range(500):
-        freq = generator.random_value
-        # Create an amplitude that varies with frequency
-        amp = generator._generate_normalized_value()
-        frequencies.append(freq)
-        amplitudes.append(amp)
-    
-    # Plot using matplotlib as required
-    plt.figure(figsize=(10, 4))
-    plt.plot(frequencies, amplitudes, 'g-', linewidth=1)
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Amplitude')
-    plt.title('Frequency vs Amplitude')
-    plt.grid(True, alpha=0.3)
-    plt.show()
-    
+    def generate_values(self, count=1):
+        """
+        Generate a list of random values within the range
+        """
+        values = []
+        for _ in range(count):
+            x = self._generate_normalized_value()  # Generate normalized value (0-1)
+            range_value = self.min_value + (self.max_value - self.min_value) * x
+            values.append(range_value)
+        return values
