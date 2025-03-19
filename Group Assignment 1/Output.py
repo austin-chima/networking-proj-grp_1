@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import DataGenerator
+import group_1_data_generator as DataGenerator
 
 plt.style.use('_mpl-gallery-nogrid')
 
