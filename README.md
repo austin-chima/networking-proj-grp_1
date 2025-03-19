@@ -33,3 +33,6 @@ python main.py
 Follow the prompts to generate data and select the desired visualization type.
 
 Customize the visualization as needed to suit your requirements.
+
+License
+This project is licensed under the GNU GENERAL PUBLIC LICENSE.
