@@ -19,7 +19,8 @@ ax.pie(
     radius=3,
     center=(4, 4),
     wedgeprops={"linewidth": 1, "edgecolor": "white"}, 
-    frame=True
+    frame=True,
+    colors=colors
 )
 
 ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
