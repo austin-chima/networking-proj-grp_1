@@ -1,29 +1,28 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import group_1_data_generator as DataGenerator
+from group_1_data_generator import DataGenerator
 
-plt.style.use('_mpl-gallery-nogrid')
 
-# Generate some sample values
-generator = DataGenerator.DataGenerator(min_value=10, max_value=50)
-x = generator.generate_values(5)
-labels = ['Category A', 'Category B', 'Category C', 'Category D', 'Category E']
-    
-colors = plt.get_cmap('Blues')(np.linspace(0.1, 0.9, len(x)))
+plt.style.use('seaborn-v0_8-darkgrid')
 
-#plot
-fig, ax= plt.subplots()
-ax.pie(
-    x,
-    labels= labels,
-    radius=3,
-    center=(4, 4),
-    wedgeprops={"linewidth": 1, "edgecolor": "white"}, 
-    frame=True,
-    colors=colors
-)
+generator = DataGenerator(min_value=0, max_value=1)  
+x = generator.generate_values(500)  
 
-ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
-       ylim=(0, 8), yticks=np.arange(1, 8))
+
+plt.figure(figsize=(10, 5))
+plt.plot(x, color='#1f77b4', linewidth=2, alpha=0.8)  
+
+
+plt.xlabel("Time (s)", fontsize=14, fontweight='bold')
+plt.ylabel("Sensor Value", fontsize=14, fontweight='bold')
+plt.title("Humidity Sensor at Progress Campus", fontsize=16, fontweight='bold')
+
+
+plt.grid(True, linestyle='--', linewidth=0.6, alpha=0.6)
+
+
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+
 
 plt.show()
