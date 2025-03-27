@@ -5,7 +5,7 @@ from group_1_data_generator import DataGenerator
 
 plt.style.use('seaborn-v0_8-darkgrid')
 
-generator = DataGenerator(min_value=0, max_value=1)  
+generator = DataGenerator(min_value=0)  
 x = generator.generate_values(500)  
 
 
