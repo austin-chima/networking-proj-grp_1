@@ -15,7 +15,7 @@ def graph_values():
     # Style and create the graphs
     plt.style.use('_mpl-gallery-nogrid')
     colors = plt.get_cmap('Greens')(np.linspace(0.2, 0.7, len(generator.values)))
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(19, 9.5))
 
     # Create bar graph
     ax.bar(range(len(generator.values)), generator.values, color=colors, width=0.8, label='Temperature changes over time')
