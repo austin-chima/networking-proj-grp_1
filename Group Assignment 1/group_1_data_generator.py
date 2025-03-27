@@ -2,12 +2,12 @@ import random
 import math
 
 class DataGenerator:
-    def __init__(self, min_value=80, max_value=120):
+    def __init__(self, min_value):
         """
         Initialize the data generator with a range of frequencies
         """
         self.min_value = min_value  # Minimum frequency value
-        self.max_value = max_value  # Maximum frequency value
+        self.max_value = (min_value + 5)  # Maximum frequency value
         self._phase = 0  
         self._frequency = random.uniform(0.8, 1.2)  
 
