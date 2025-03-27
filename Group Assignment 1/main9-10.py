@@ -12,12 +12,15 @@ def graph_values():
     generator = DataGenerator(min_value)
     generator.generate_values(20)
 
-    # Style and create the pie chart
+    # Style and create the graphs
     plt.style.use('_mpl-gallery-nogrid')
-    colors = plt.get_cmap('Blues')(np.linspace(0.2, 0.7, 20))
+    colors = plt.get_cmap('Greens')(np.linspace(0.2, 0.7, len(generator.values)))
     fig, ax = plt.subplots()
-    ax.pie(generator.values, colors=colors, autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')
+
+    # Create bar graph
+    ax.bar(range(len(generator.values)), generator.values, color=colors, width=0.8, label='Temperature changes over time')
+    ax.plot(range(len(generator.values)), generator.values, color='red', linewidth=2, alpha=0.8)
+    ax.legend()
 
     # Embed the plot in the Tkinter window
     canvas = FigureCanvasTkAgg(fig, master=m)
