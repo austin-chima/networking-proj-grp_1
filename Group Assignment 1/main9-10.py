@@ -12,6 +12,7 @@ class SensorApp:
         self.root.title('Humidity Sensor Monitor - Progress Campus')
         self.root.geometry('1000x800')
         self.root.configure(bg='#f0f0f0')  # Light gray background
+        self.min_value = 13
         
         # Configure style
         style = ttk.Style()
@@ -46,25 +47,11 @@ class SensorApp:
         controls_frame = ttk.Frame(input_frame, style='Premium.TFrame')
         controls_frame.pack()
         
-        ttk.Label(controls_frame,
-                 text='Minimum Value:',
-                 style='Premium.TLabel').pack(side=tk.LEFT, padx=(0, 10))
-        
-        self.min_value = ttk.Entry(controls_frame,
-                                 width=10,
-                                 font=('Helvetica', 12),
-                                 style='Premium.TEntry')
-        self.min_value.pack(side=tk.LEFT, padx=(0, 20))
-        self.min_value.insert(0, "0")
-        
-        ttk.Button(controls_frame,
-                  text='Generate Graph',
-                  command=self.graph_values,
-                  style='Premium.TButton').pack(side=tk.LEFT)
-        
         # Graph container
         self.graph_frame = ttk.Frame(self.main_frame, style='Premium.TFrame')
-        self.graph_frame.pack(fill=tk.BOTH, expand=True)
+        self.graph_frame.pack(fill=tk.BOTH, expand=True)        
+        
+        self.graph_values()
         
     def graph_values(self):
         # Clear previous graph if it exists
@@ -72,7 +59,7 @@ class SensorApp:
             widget.destroy()
             
         try:
-            min_value = int(self.min_value.get())
+            min_value = self.min_value
             
             # Generate data
             generator = DataGenerator(min_value)
