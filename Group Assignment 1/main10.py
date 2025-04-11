@@ -5,8 +5,8 @@ import tkinter as tk
 from tkinter import ttk 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.style as mpl_style
-import threading
 import time
+import threading
 
 class SensorApp:
     def __init__(self, root):
@@ -21,6 +21,7 @@ class SensorApp:
         
         # Flag to control update thread
         self.running = True
+        self.connected = False
         
         # Configure style
         style = ttk.Style()
@@ -45,11 +46,22 @@ class SensorApp:
         control_frame = ttk.Frame(self.main_frame, style='Premium.TFrame')
         control_frame.pack(fill=tk.X, pady=(0, 10))
         
+        # Connection controls
+        self.connect_btn = ttk.Button(control_frame, text="Connect", 
+                                    command=self.connect, style='Premium.TButton')
+        self.connect_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.disconnect_btn = ttk.Button(control_frame, text="Disconnect", 
+                                       command=self.disconnect, style='Premium.TButton')
+        self.disconnect_btn.pack(side=tk.LEFT, padx=5)
+        self.disconnect_btn.config(state='disabled')
+        
         self.update_btn = ttk.Button(control_frame, text="Pause Updates", 
                                     command=self.toggle_updates, style='Premium.TButton')
         self.update_btn.pack(side=tk.LEFT, padx=5)
+        self.update_btn.config(state='disabled')
         
-        self.status_label = ttk.Label(control_frame, text="Status: Running", 
+        self.status_label = ttk.Label(control_frame, text="Status: Disconnected", 
                                      style='Premium.TLabel')
         self.status_label.pack(side=tk.LEFT, padx=20)
         
@@ -65,21 +77,39 @@ class SensorApp:
         
         # Initial graph
         self.graph_values()
-        
-        # Start update thread
-        self.start_update_thread()
+
+    def connect(self):
+        try:
+            self.connected = True
+            self.connect_btn.config(state='disabled')
+            self.disconnect_btn.config(state='normal')
+            self.update_btn.config(state='normal')
+            self.status_label.config(text="Status: Connected")
+            self.start_update_thread()
+        except Exception as e:
+            self.status_label.config(text=f"Status: Connection Error - {str(e)}")
+            self.connected = False
+
+    def disconnect(self):
+        self.connected = False
+        self.running = False
+        self.connect_btn.config(state='normal')
+        self.disconnect_btn.config(state='disabled')
+        self.update_btn.config(state='disabled')
+        self.status_label.config(text="Status: Disconnected")
 
     def toggle_updates(self):
         self.running = not self.running
         if self.running:
             self.update_btn.config(text="Pause Updates")
-            self.status_label.config(text="Status: Running")
+            self.status_label.config(text="Status: Connected - Running")
         else:
             self.update_btn.config(text="Resume Updates")
-            self.status_label.config(text="Status: Paused")
+            self.status_label.config(text="Status: Connected - Paused")
 
     def on_closing(self):
         self.running = False
+        self.connected = False
         self.root.destroy()
 
     def start_update_thread(self):
@@ -88,7 +118,7 @@ class SensorApp:
         thread.start()
 
     def update_loop(self):
-        while True:
+        while self.connected:
             if self.running:
                 try:
                     # Get new data point using the generator
